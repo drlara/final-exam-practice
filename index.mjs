@@ -16,13 +16,19 @@ const pool = mysql.createPool({
     connectionLimit: 10,
     waitForConnections: true
 });
-//routes
-app.get('/', (req, res) => {
-   console.log("Password " + process.env.DB_PASSWORD);
-   console.log("User " + process.env.DB_USER);
 
-   res.send('Hello Express app!')
+//routes
+app.get('/',   async (req, res) => {
+    let sql = `SELECT * 
+              FROM fe_comics
+              ORDER BY RAND()
+              LIMIT 1`;
+    const [randomComic] = await pool.query(sql);
+    console.log(randomComic);
+    res.render('home.ejs', {randomComic})
 });
+
+
 app.get("/dbTest", async(req, res) => {
    try {
         const [rows] = await pool.query("SELECT CURDATE()");
@@ -32,6 +38,8 @@ app.get("/dbTest", async(req, res) => {
         res.status(500).send("Database error!");
     }
 });//dbTest
+
+
 app.listen(3000, ()=>{
     console.log("Express server running")
 })
