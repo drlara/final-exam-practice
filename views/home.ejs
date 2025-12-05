@@ -8,9 +8,22 @@
 <body>
     <h1> My Favorite Comics</h1>
 
-    <img src="<%= randomComic[0].comicUrl %>" width="800"><br>
-    <span> <%= randomComic[0].comicSiteName %> </span>
+    <img id="comicImage" src="<%= randomComic[0].comicUrl %>" width="800"><br>
+    <span id=""comicName"> <%= randomComic[0].comicSiteName %> </span>
     <br>
     <button> Random Comic </button>
+
+    <script>
+        document.querySelector("button").addEventListener("click",displayRandomComic);
+
+        async function displayRandomComic(){
+            let url = "/api/randomComic";
+            let response = await fetch(url);
+            let data = await response.json();
+            document.querySelector("#comicImage").src = data[0].comicUrl;
+            document.querySelector("#comicName").textContent = data[0].comicSiteName;
+        }
+
+    </script>
 </body>
 </html>
